@@ -1,1 +1,0 @@
-jar cf ApaveImageShrinker.jar ApaveImageShrinker$1.class ApaveImageShrinker$2.class ApaveImageShrinker$3.class ApaveImageShrinker$4.class ApaveImageShrinker$5.class ApaveImageShrinker.class icon.png Logo.ico Logo.jpg Resizer.class Thumbnail.class
