@@ -1,1 +1,8 @@
 This is a small Java application which shrinks every image file in a given folder to a width of 800px, keeping the scale the same. It is intended for mass storage of evidentiary photos which do not need high quality versions. Orginally made for use while I worked at a Non-Destructive Testing company which stores photos of every job.
+
+
+
+App icon attribution:
+
+<a href="https://www.flaticon.com/free-icons/shrink" title="shrink icons">Shrink icons created by Smashicons - Flaticon</a>
+

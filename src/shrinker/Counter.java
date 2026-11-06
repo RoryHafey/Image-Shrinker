@@ -1,6 +1,5 @@
-/* Apave Image Shrinker - Counter
+/* Image Shrinker - Counter
  * Rory Hafey (roryngh@hotmail.com)
- * Apave Newcastle
  * 2025
  */
 
@@ -13,7 +12,6 @@ public class Counter {
 
     public synchronized void incDone(){
         numDone++;
-//        System.out.println(numDone);
     }
 
     public synchronized int getNumDone(){

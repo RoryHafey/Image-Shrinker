@@ -1,6 +1,5 @@
-/* Apave Image Shrinker - Thumbnail
+/* Image Shrinker - Thumbnail
  * Rory Hafey (roryngh@hotmail.com)
- * Apave Newcastle
  * 2025
  */
 
@@ -8,14 +7,12 @@
 
 package shrinker;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.lang.OutOfMemoryError;
-import java.lang.NullPointerException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 // Class to make thumbnail images for the display. No file output, outputs to the display instead
 public class Thumbnail implements Runnable

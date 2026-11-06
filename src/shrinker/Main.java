@@ -1,6 +1,5 @@
-/* Apave Image Shrinker
+/* Image Shrinker
  * Rory Hafey (roryngh@hotmail.com)
- * Apave Newcastle
  * 2025
  */
 
@@ -29,29 +28,55 @@ public class Main
     static JPanel displayDirectory = new JPanel(new GridLayout(0, 2));
     static JMenuBar menuBar;
     static JMenu fileMenu, helpMenu;
-    static JFrame frame = new JFrame("Apave Image Shrinker");
+    static JFrame frame = new JFrame("Image Shrinker");
     static JMenuItem openFolder, exitProgram, aboutProgram;
     static String imagePath = "null";
     static ArrayList<String> filesToShrink = new ArrayList<String>();
     static String lastDirectory;
     static int numDone = 0;
+    static Counter counter = new Counter();
 
     public static void main(String[] args)
     {
-
-        Counter counter = new Counter();
-
         // Get the last directory opened
-        try{
-            File configFile = new File("config.txt");
-            Scanner configReader = new Scanner(configFile);
-            String nextLine =  configReader.nextLine();
-            lastDirectory = nextLine.split(">")[1];
-        }
-        catch(IOException e){
-            System.out.println("Error reading config file");
+        try {
+            File configFile = getConfigFile();
+            if (configFile.exists() && configFile.isFile()) {
+                try (Scanner configReader = new Scanner(configFile)) {
+                    if (configReader.hasNextLine()) {
+                        String nextLine = configReader.nextLine();
+
+                        if (nextLine.contains(">")) {
+                            lastDirectory = nextLine.split(">", 2)[1].trim();
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        if (lastDirectory == null || lastDirectory.isEmpty()) {
+            lastDirectory = System.getProperty("user.home");
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            createAndShowGUI();
+        });
+    }
+
+    // Handle the config file
+    public static File getConfigFile() {
+        String appData = System.getenv("APPDATA");
+        File configDirectory = new File(appData, "ImageShrinker");
+        if (!configDirectory.exists()) {
+            configDirectory.mkdirs();
+        }
+        return new File(configDirectory, "config.txt");
+    }
+
+    // Create and show the gui when able to
+    public static void createAndShowGUI(){
         // Create the GUI frame, set up menu items
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
@@ -79,7 +104,6 @@ public class Main
         // create file opening item and scrolling window
         JFileChooser selectDirectory = new JFileChooser(lastDirectory);
         JScrollPane scrollPane = new JScrollPane(displayDirectory, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
 
         // set up the dimensions (x axis, y axis, width, height)
         shrinkImages.setBounds(250, 250, 175, 50);
@@ -94,13 +118,16 @@ public class Main
         frame.add(preview);
         frame.setJMenuBar(menuBar);
 
-        // set the icon pics for the frame
+        // Set the icon pic for the frame
         try {
-            InputStream is = shrinker.Main.class.getResourceAsStream("/images/Logo.jpg");
-            iconPic = ImageIO.read(is);
+            InputStream is = Main.class.getResourceAsStream("/resources/images/Logo.png");
+            if (is != null) {
+                iconPic = ImageIO.read(is);
+                is.close();
+            }
         }
-        catch (IOException errors){
-            System.out.println("Icon file not found");
+        catch (IOException errors) {
+            System.out.println("Error loading icon: " + errors.getMessage());
         }
 
         frame.setIconImage(iconPic);
@@ -146,7 +173,7 @@ public class Main
 
         aboutProgram.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Developed by Rory Hafey\nApave Australia\n2025", "About this program", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Developed by Rory Hafey\n2025", "About this program", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -218,8 +245,8 @@ public class Main
                             }
                         }
                         else {
-                                JOptionPane.showMessageDialog(null,
-                                        "No images selected. Open a folder", "Error", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null,
+                                    "No images selected. Open a folder", "Error", JOptionPane.INFORMATION_MESSAGE);
                         }
                         return null;
                     }
@@ -255,7 +282,6 @@ public class Main
                 }.execute();
             }
         });
-
     }
 
 
@@ -270,7 +296,7 @@ public class Main
             try{
                 // Update the lastDirectory
                 lastDirectory = imagePath;
-                FileWriter setLast = new FileWriter("config.txt");
+                FileWriter setLast = new FileWriter("../config.txt");
                 setLast.write("Last used directory >" + lastDirectory);
                 setLast.close();
                 System.out.println(lastDirectory);
@@ -317,7 +343,7 @@ public class Main
 
                 try {
                     int timer = 0;
-                    while (counter.getNumDone() < subArray.length-1) {
+                    while (counter.getNumDone() < filesToShrink.size()-1) {
                         Thread.sleep(100);
                         timer += 100;
                         System.out.println(counter.getNumDone());

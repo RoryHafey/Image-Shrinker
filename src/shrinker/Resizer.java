@@ -1,6 +1,5 @@
-/* Apave Image Shrinker - Resizer
+/* Image Shrinker - Resizer
  * Rory Hafey (roryngh@hotmail.com)
- * Apave Newcastle
  * 2025
  */
 
@@ -9,14 +8,13 @@
 
 package shrinker;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.image.BufferedImage;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Graphics2D;
-import java.lang.OutOfMemoryError;
-import java.util.regex.Pattern;
 
 
 // Class to make resized images for the display. Outputs to file
